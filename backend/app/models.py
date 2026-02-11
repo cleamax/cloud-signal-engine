@@ -1,6 +1,6 @@
 """SQLAlchemy data models for SignalForge."""
 
-from enum import StrEnum
+from enum import Enum
 
 from sqlalchemy import JSON, Column, DateTime, Integer, String, Text
 from sqlalchemy.sql import func
@@ -8,7 +8,7 @@ from sqlalchemy.sql import func
 from .database import Base
 
 
-class AlertStatus(StrEnum):
+class AlertStatus(str, Enum):  # noqa: UP042
     """Alert status enumeration."""
 
     OPEN = "open"
@@ -17,7 +17,7 @@ class AlertStatus(StrEnum):
     FALSE_POSITIVE = "false_positive"
 
 
-class AlertSeverity(StrEnum):
+class AlertSeverity(str, Enum):  # noqa: UP042
     """Alert severity levels."""
 
     LOW = "low"

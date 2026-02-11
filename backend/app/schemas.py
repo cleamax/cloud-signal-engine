@@ -1,25 +1,28 @@
 """Pydantic schemas for request/response validation."""
 
-from datetime import UTC, datetime
-from typing import Any
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 
 from .models import AlertStatus
 
 
+
 class EventCreate(BaseModel):
     """Schema for creating a new event."""
 
     timestamp: datetime
-    actor: str | None = None
-    source_ip: str | None = Field(None, alias="source.ip")
-    user_agent: str | None = None
+    actor: Optional[str] = None
+    source_ip: Optional[str] = Field(None, alias="source.ip")
+    user_agent: Optional[str] = None
     action: str
-    resource: str | None = None
-    outcome: str | None = None
-    request_id: str | None = None
-    raw_data: dict[str, Any] | None = None
+    resource: Optional[str] = None
+    outcome: Optional[str] = None
+    request_id: Optional[str] = None
+    raw_data: Optional[Dict[str, Any]] = None
 
     model_config = {"populate_by_name": True}
 
@@ -31,7 +34,7 @@ class EventCreate(BaseModel):
             return v
         if isinstance(v, (int, float)):
             # Unix timestamp
-            return datetime.fromtimestamp(v, tz=UTC)
+            return datetime.fromtimestamp(v, tz=timezone.utc)
         if isinstance(v, str):
             from dateutil import parser
 
@@ -44,13 +47,13 @@ class EventResponse(BaseModel):
 
     id: int
     timestamp: datetime
-    actor: str | None
-    source_ip: str | None
-    user_agent: str | None
+    actor: Optional[str]
+    source_ip: Optional[str]
+    user_agent: Optional[str]
     action: str
-    resource: str | None
-    outcome: str | None
-    request_id: str | None
+    resource: Optional[str]
+    outcome: Optional[str]
+    request_id: Optional[str]
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -64,10 +67,10 @@ class AlertResponse(BaseModel):
     severity: str
     status: str
     summary: str
-    evidence: dict[str, Any]
+    evidence: Dict[str, Any]
     alert_time: datetime
-    window_start: datetime | None
-    window_end: datetime | None
+    window_start: Optional[datetime]
+    window_end: Optional[datetime]
     created_at: datetime
     updated_at: datetime
 
@@ -84,7 +87,7 @@ class FalsePositiveCreate(BaseModel):
     """Schema for marking alert as false positive."""
 
     reason: str
-    marked_by: str | None = None
+    marked_by: Optional[str] = None
 
 
 class AllowlistCreate(BaseModel):
@@ -93,9 +96,9 @@ class AllowlistCreate(BaseModel):
     entry_type: str = Field(..., pattern="^(ip|actor)$")
     entry_value: str
     reason: str
-    rule_id: str | None = None
-    expires_at: datetime | None = None
-    created_by: str | None = None
+    rule_id: Optional[str] = None
+    expires_at: Optional[datetime] = None
+    created_by: Optional[str] = None
 
 
 class AllowlistResponse(BaseModel):
@@ -105,9 +108,9 @@ class AllowlistResponse(BaseModel):
     entry_type: str
     entry_value: str
     reason: str
-    rule_id: str | None
-    expires_at: datetime | None
-    created_by: str | None
+    rule_id: Optional[str]
+    expires_at: Optional[datetime]
+    created_by: Optional[str]
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -117,13 +120,14 @@ class IngestResponse(BaseModel):
     """Schema for ingest endpoint response."""
 
     ingested: int
-    event_ids: list[int]
-    errors: list[str] = []
+    event_ids: List[int]
+    errors: List[str] = []
 
 
 class DetectionRunResponse(BaseModel):
     """Schema for detection run response."""
 
     alerts_generated: int
-    rules_executed: list[str]
+    rules_executed: List[str]
     execution_time_ms: float
+

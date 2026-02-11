@@ -1,6 +1,6 @@
 """Tests for detection rules."""
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from app.database import Base
@@ -29,7 +29,7 @@ def db_session():
 def test_brute_force_rule(db_session):
     """Test brute force detection."""
     rule = BruteForceRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(minutes=15)
 
     # Create 10 failed login attempts from same IP
@@ -58,7 +58,7 @@ def test_brute_force_rule(db_session):
 def test_password_spray_rule(db_session):
     """Test password spray detection."""
     rule = PasswordSprayRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(minutes=30)
 
     # Create login attempts to 15 different users from same IP
@@ -87,7 +87,7 @@ def test_password_spray_rule(db_session):
 def test_impossible_travel_rule(db_session):
     """Test impossible travel detection."""
     rule = ImpossibleTravelRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(hours=1)
 
     # Login from US IP
@@ -122,7 +122,7 @@ def test_impossible_travel_rule(db_session):
 def test_suspicious_user_agent_rule(db_session):
     """Test suspicious user-agent detection."""
     rule = SuspiciousUserAgentRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(minutes=15)
 
     # Create 10 requests with curl user agent
@@ -151,7 +151,7 @@ def test_suspicious_user_agent_rule(db_session):
 def test_api_abuse_rule(db_session):
     """Test API abuse detection."""
     rule = ApiAbuseRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(minutes=5)
 
     # Create 150 requests from same IP in 5 minutes
@@ -178,7 +178,7 @@ def test_api_abuse_rule(db_session):
 def test_privilege_escalation_rule(db_session):
     """Test privilege escalation detection."""
     rule = PrivilegeEscalationRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(hours=1)
 
     # Create IAM role change event
@@ -206,7 +206,7 @@ def test_privilege_escalation_rule(db_session):
 def test_brute_force_no_alert_below_threshold(db_session):
     """Test that brute force doesn't trigger below threshold."""
     rule = BruteForceRule()
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
     window_start = now - timedelta(minutes=15)
 
     # Create only 3 failed attempts (below threshold of 5)
