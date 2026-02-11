@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import and_, or_
@@ -94,7 +94,7 @@ async def update_alert_status(
         raise HTTPException(status_code=404, detail="Alert not found")
 
     alert.status = status_update.status.value
-    alert.updated_at = datetime.now(UTC)
+    alert.updated_at = datetime.now(timezone.utc)
 
     db.commit()
     db.refresh(alert)
@@ -123,7 +123,7 @@ async def mark_false_positive(
 
     # Update alert status
     alert.status = "false_positive"
-    alert.updated_at = datetime.now(UTC)
+    alert.updated_at = datetime.now(timezone.utc)
 
     # Record false positive
     fp = FalsePositive(
@@ -141,7 +141,7 @@ async def mark_false_positive(
 @router.get("/allowlist", response_model=list[AllowlistResponse])
 async def list_allowlist(db: Session = Depends(get_db)):
     """List all active allowlist entries."""
-    now = datetime.now(UTC)
+    now = datetime.now(timezone.utc)
 
     # Get entries that haven't expired
     entries = (
