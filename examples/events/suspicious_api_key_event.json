@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-02-12T23:43:12Z",
+  "user": "svc-backend-prod",
+  "source_ip": "185.212.x.x",
+  "action": "GenerateAccessKey",
+  "region": "eu-central-1"
+}
