@@ -157,7 +157,6 @@ def _is_duplicate(db: Session, detection: dict) -> bool:
     """Check if similar alert was recently created."""
     rule_id = detection["rule_id"]
 
-
     # Look for recent alerts (last 1 hour) with same rule
     recent_cutoff = datetime.now(UTC) - timedelta(hours=1)
 

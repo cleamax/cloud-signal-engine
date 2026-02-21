@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
@@ -45,7 +45,7 @@ class ApiAbuseRule(DetectionRule):
 
     def detect(
         self, db: Session, window_start: datetime, window_end: datetime
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Detect API abuse."""
         threshold = 100  # 100+ requests in 5 minutes
 

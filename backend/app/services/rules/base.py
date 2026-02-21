@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any
 
 from sqlalchemy.orm import Session
 
@@ -45,7 +45,7 @@ class DetectionRule(ABC):
     @abstractmethod
     def detect(
         self, db: Session, window_start: datetime, window_end: datetime
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Execute detection logic.
 
