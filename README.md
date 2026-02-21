@@ -60,16 +60,35 @@ curl -X POST http://localhost:8000/api/v1/detections/run
 ## 🏗️ Architecture
 
 ```mermaid
-graph LR
-    A[Log Sources] -->|JSONL/HTTP| B[Ingestion API]
-    B --> C[Normalizer]
-    C --> D[(SQLite)]
-    E[Detection Engine] -->|Query Events| D
-    E -->|Generate| F[Alerts]
-    F --> D
-    G[Triage UI] -->|View/Manage| F
-    H[Scheduler] -.->|Trigger| E
+graph TD
+    subgraph "Ingestion Layer"
+        A[Log Sources] -->|NDJSON/HTTP| B[Ingestion API]
+        B --> C[Normalizer]
+    end
+
+    subgraph "Storage Layer"
+        C --> D[(Event Store)]
+        F[(Alert Store)]
+    end
+
+    subgraph "Engine Layer"
+        E[Rule Engine] -->|Query| D
+        E -->|Trigger| F
+    end
+
+    subgraph "Presentation Layer"
+        G[Triage UI] -->|Manage| F
+    end
+
+    H[Scheduler] -.->|Poll| E
 ```
+
+### Philosophy & Rationale
+Cloud Signal Engine is intentionally designed as a **minimalist detection pipeline** rather than a full-scale SIEM.
+
+*   **Why custom?** SIEMs are often overkill for targeted cloud monitoring. This engine provides a lightweight way to codify detection logic without the overhead of index management or proprietary query languages.
+*   **Why minimal?** Focus is on the **Detection Lifecycle**: Ingestion → Logic → Alerting. We skip complex features like correlation engines or distributed ingestion to keep the signal-to-noise ratio high and maintenance low.
+*   **What it isn't:** This is not a log aggregator or a long-term forensic lake. It is a real-time (windowed) detection layer.
 
 ### Components
 
