@@ -1,11 +1,8 @@
-# SignalForge v0.1.0
+# Cloud Signal Engine
 
-**Production-style security detection and abuse monitoring platform**
+**A modern detection engineering project for cloud threat monitoring.**
 
-SignalForge is an enterprise-grade security detection system designed for cloud environments. It ingests security events, applies intelligent detection rules to identify threats, and provides a modern triage workflow for security operations teams.
-
-[![CI](https://github.com/yourusername/signalforge/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/signalforge/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Cloud Signal Engine is a lean, engineering-focused platform for ingesting, normalizing, and analyzing security events. It is designed to showcase deterministic detection logic, structured evidence collection, and transparent systems thinking in cloud security.
 
 ---
 
@@ -20,8 +17,8 @@ SignalForge is an enterprise-grade security detection system designed for cloud 
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/signalforge.git
-cd signalforge
+git clone https://github.com/clearmax/cloud-signal-engine.git
+cd cloud-signal-engine
 
 # 2. Install Python dependencies
 pip install -e ".[dev]"
@@ -382,28 +379,9 @@ Full API docs available at: http://localhost:8000/docs
 *   **GeoIP2 Integration**: Replacing the current heuristic distance estimation in the "Impossible Travel" rule with precision MaxMind GeoIP2 data.
 *   **Kubernetes Deployment**: Containerizing the backend and frontend with Helm charts for production-ready orchestration.
 *   **Performance Benchmarking**: Stress testing the normalization pipeline to determine events-per-second (EPS) limits.
----
-
-## 🤝 Contributing
-
-Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details
-
----
-
-## 🙏 Acknowledgments
-
-Built with:
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
-- [Next.js](https://nextjs.org/) - React framework
-- [SQLAlchemy](https://www.sqlalchemy.org/) - SQL toolkit and ORM
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-
----
-
-**SignalForge** - Detect threats before they become breaches.
