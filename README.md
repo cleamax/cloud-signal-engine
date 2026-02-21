@@ -92,10 +92,11 @@ SignalForge includes 6 production-ready detection rules mapped to MITRE ATT&CK:
 |------|-------------|----------|--------------|
 | **Brute Force Login** | Multiple failed login attempts from same IP | HIGH | T1110 |
 | **Password Spray** | Single IP targeting many user accounts | CRITICAL | T1110.003 |
-| **Impossible Travel** | User logins from geographically distant locations in short timeframe | HIGH | T1078 |
+| **Impossible Travel** | User logins from geographically distant locations | HIGH | T1078 |
+| **Suspicious API Key** | API key generation outside business hours | MEDIUM | T1078.004 |
 | **Suspicious User-Agent** | Automated tools or empty user agents | MEDIUM | T1071 |
-| **API Abuse** | Abnormal request rate spike indicating DoS or scraping | MEDIUM | T1498 |
-| **Privilege Escalation** | IAM role/permission changes | CRITICAL | T1078.004, T1548 |
+| **API Abuse** | Abnormal request rate spike | MEDIUM | T1498 |
+| **Privilege Escalation** | IAM role/permission changes | CRITICAL | T1548 |
 
 ### Rule Characteristics
 - **Time-windowed analysis**: Each rule analyzes events within specific time windows (5-60 minutes)
@@ -103,7 +104,39 @@ SignalForge includes 6 production-ready detection rules mapped to MITRE ATT&CK:
 - **Tunable thresholds**: Easily adjust sensitivity via rule parameters
 - **Allowlist support**: Suppress false positives for known-safe IPs and actors
 
+
 ---
+
+## 📖 Detection Story: Suspicious API Key Usage
+
+### The Scenario
+Standard business operations for `svc-backend-prod` occur within 08:00–18:00 UTC. An attacker compromises an identity and generates a new API key at **23:43 UTC** to establish persistence, assuming the activity will blend in with noise.
+
+### Why This Matters
+In real-world cloud environments, API key generation is a high-value event. When performed outside of standard operational windows or by accounts that rarely perform IAM modifications, it strongly suggests **Credential Compromise** or **Insider Threat**.
+
+### How We Detect It
+The `suspicious_api_key` rule monitors all `GenerateAccessKey` actions. By applying a temporal filter, we flag any generation happening outside the 08:00–18:00 UTC window.
+
+**Example Raw Event:**
+```json
+{
+  "timestamp": "2026-02-12T23:43:12Z",
+  "user": "svc-backend-prod",
+  "action": "GenerateAccessKey",
+  "region": "eu-central-1"
+}
+```
+
+**Resulting Alert:**
+```json
+{
+  "severity": "medium",
+  "rule_id": "suspicious_api_key",
+  "reason": "API key generated outside business hours",
+  "entity": "svc-backend-prod"
+}
+```
 
 ## 📊 Canonical Event Schema
 
