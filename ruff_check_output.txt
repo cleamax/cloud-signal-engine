@@ -1,0 +1,688 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> backend\app\routers\alerts.py:3:1
+   |
+ 1 |   """Alert management endpoints."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | from datetime import datetime, timezone
+ 6 | |
+ 7 | | from typing import List, Optional
+ 8 | | from fastapi import APIRouter, Depends, HTTPException, Query
+ 9 | | from sqlalchemy import and_, or_
+10 | | from sqlalchemy.orm import Session
+11 | |
+12 | | from ..database import get_db
+13 | | from ..models import Alert, AllowlistEntry, FalsePositive
+14 | | from ..schemas import (
+15 | |     AlertResponse,
+16 | |     AlertStatusUpdate,
+17 | |     AllowlistCreate,
+18 | |     AllowlistResponse,
+19 | |     FalsePositiveCreate,
+20 | | )
+   | |_^
+21 |
+22 |   router = APIRouter()
+   |
+help: Organize imports
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\routers\alerts.py:27:13
+   |
+25 | @router.get("/alerts", response_model=List[AlertResponse])
+26 | async def list_alerts(
+27 |     status: Optional[str] = Query(None, description="Filter by status"),
+   |             ^^^^^^^^^^^^^
+28 |     severity: Optional[str] = Query(None, description="Filter by severity"),
+29 |     rule_id: Optional[str] = Query(None, description="Filter by rule ID"),
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\routers\alerts.py:28:15
+   |
+26 | async def list_alerts(
+27 |     status: Optional[str] = Query(None, description="Filter by status"),
+28 |     severity: Optional[str] = Query(None, description="Filter by severity"),
+   |               ^^^^^^^^^^^^^
+29 |     rule_id: Optional[str] = Query(None, description="Filter by rule ID"),
+30 |     limit: int = Query(50, le=500, description="Maximum number of alerts to return"),
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\routers\alerts.py:29:14
+   |
+27 |     status: Optional[str] = Query(None, description="Filter by status"),
+28 |     severity: Optional[str] = Query(None, description="Filter by severity"),
+29 |     rule_id: Optional[str] = Query(None, description="Filter by rule ID"),
+   |              ^^^^^^^^^^^^^
+30 |     limit: int = Query(50, le=500, description="Maximum number of alerts to return"),
+31 |     db: Session = Depends(get_db),
+   |
+help: Convert to `X | None`
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> backend\app\routers\ingest.py:3:1
+   |
+ 1 |   """Event ingestion endpoints."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | from typing import List, Union
+ 6 | | from fastapi import APIRouter, Depends, HTTPException
+ 7 | | from sqlalchemy.orm import Session
+ 8 | |
+ 9 | | from ..database import get_db
+10 | | from ..models import Event
+11 | | from ..schemas import EventCreate, IngestResponse
+12 | | from ..services.normalizer import normalize_event
+   | |_________________________________________________^
+13 |
+14 |   router = APIRouter()
+   |
+help: Organize imports
+
+UP007 Use `X | Y` for type annotations
+  --> backend\app\routers\ingest.py:19:13
+   |
+17 | @router.post("/ingest", response_model=IngestResponse)
+18 | async def ingest_events(
+19 |     events: Union[List[EventCreate], EventCreate],
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+20 |     db: Session = Depends(get_db),
+21 | ):
+   |
+help: Convert to `X | Y`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\routers\ingest.py:19:19
+   |
+17 | @router.post("/ingest", response_model=IngestResponse)
+18 | async def ingest_events(
+19 |     events: Union[List[EventCreate], EventCreate],
+   |                   ^^^^
+20 |     db: Session = Depends(get_db),
+21 | ):
+   |
+help: Replace with `list`
+
+F401 [*] `typing.Union` imported but unused
+ --> backend\app\schemas.py:6:47
+  |
+5 | from datetime import datetime, timezone
+6 | from typing import Any, Dict, List, Optional, Union
+  |                                               ^^^^^
+7 |
+8 | from pydantic import BaseModel, Field, field_validator
+  |
+help: Remove unused import: `typing.Union`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:17:12
+   |
+16 |     timestamp: datetime
+17 |     actor: Optional[str] = None
+   |            ^^^^^^^^^^^^^
+18 |     source_ip: Optional[str] = Field(None, alias="source.ip")
+19 |     user_agent: Optional[str] = None
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:18:16
+   |
+16 |     timestamp: datetime
+17 |     actor: Optional[str] = None
+18 |     source_ip: Optional[str] = Field(None, alias="source.ip")
+   |                ^^^^^^^^^^^^^
+19 |     user_agent: Optional[str] = None
+20 |     action: str
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:19:17
+   |
+17 |     actor: Optional[str] = None
+18 |     source_ip: Optional[str] = Field(None, alias="source.ip")
+19 |     user_agent: Optional[str] = None
+   |                 ^^^^^^^^^^^^^
+20 |     action: str
+21 |     resource: Optional[str] = None
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:21:15
+   |
+19 |     user_agent: Optional[str] = None
+20 |     action: str
+21 |     resource: Optional[str] = None
+   |               ^^^^^^^^^^^^^
+22 |     outcome: Optional[str] = None
+23 |     request_id: Optional[str] = None
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:22:14
+   |
+20 |     action: str
+21 |     resource: Optional[str] = None
+22 |     outcome: Optional[str] = None
+   |              ^^^^^^^^^^^^^
+23 |     request_id: Optional[str] = None
+24 |     raw_data: Optional[Dict[str, Any]] = None
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:23:17
+   |
+21 |     resource: Optional[str] = None
+22 |     outcome: Optional[str] = None
+23 |     request_id: Optional[str] = None
+   |                 ^^^^^^^^^^^^^
+24 |     raw_data: Optional[Dict[str, Any]] = None
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:24:15
+   |
+22 |     outcome: Optional[str] = None
+23 |     request_id: Optional[str] = None
+24 |     raw_data: Optional[Dict[str, Any]] = None
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^
+25 |
+26 |     model_config = {"populate_by_name": True}
+   |
+help: Convert to `X | None`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\schemas.py:24:24
+   |
+22 |     outcome: Optional[str] = None
+23 |     request_id: Optional[str] = None
+24 |     raw_data: Optional[Dict[str, Any]] = None
+   |                        ^^^^
+25 |
+26 |     model_config = {"populate_by_name": True}
+   |
+help: Replace with `dict`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:49:12
+   |
+47 |     id: int
+48 |     timestamp: datetime
+49 |     actor: Optional[str]
+   |            ^^^^^^^^^^^^^
+50 |     source_ip: Optional[str]
+51 |     user_agent: Optional[str]
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:50:16
+   |
+48 |     timestamp: datetime
+49 |     actor: Optional[str]
+50 |     source_ip: Optional[str]
+   |                ^^^^^^^^^^^^^
+51 |     user_agent: Optional[str]
+52 |     action: str
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:51:17
+   |
+49 |     actor: Optional[str]
+50 |     source_ip: Optional[str]
+51 |     user_agent: Optional[str]
+   |                 ^^^^^^^^^^^^^
+52 |     action: str
+53 |     resource: Optional[str]
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:53:15
+   |
+51 |     user_agent: Optional[str]
+52 |     action: str
+53 |     resource: Optional[str]
+   |               ^^^^^^^^^^^^^
+54 |     outcome: Optional[str]
+55 |     request_id: Optional[str]
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:54:14
+   |
+52 |     action: str
+53 |     resource: Optional[str]
+54 |     outcome: Optional[str]
+   |              ^^^^^^^^^^^^^
+55 |     request_id: Optional[str]
+56 |     created_at: datetime
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:55:17
+   |
+53 |     resource: Optional[str]
+54 |     outcome: Optional[str]
+55 |     request_id: Optional[str]
+   |                 ^^^^^^^^^^^^^
+56 |     created_at: datetime
+   |
+help: Convert to `X | None`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\schemas.py:69:15
+   |
+67 |     status: str
+68 |     summary: str
+69 |     evidence: Dict[str, Any]
+   |               ^^^^
+70 |     alert_time: datetime
+71 |     window_start: Optional[datetime]
+   |
+help: Replace with `dict`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:71:19
+   |
+69 |     evidence: Dict[str, Any]
+70 |     alert_time: datetime
+71 |     window_start: Optional[datetime]
+   |                   ^^^^^^^^^^^^^^^^^^
+72 |     window_end: Optional[datetime]
+73 |     created_at: datetime
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:72:17
+   |
+70 |     alert_time: datetime
+71 |     window_start: Optional[datetime]
+72 |     window_end: Optional[datetime]
+   |                 ^^^^^^^^^^^^^^^^^^
+73 |     created_at: datetime
+74 |     updated_at: datetime
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+  --> backend\app\schemas.py:89:16
+   |
+88 |     reason: str
+89 |     marked_by: Optional[str] = None
+   |                ^^^^^^^^^^^^^
+   |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:98:14
+    |
+ 96 |     entry_value: str
+ 97 |     reason: str
+ 98 |     rule_id: Optional[str] = None
+    |              ^^^^^^^^^^^^^
+ 99 |     expires_at: Optional[datetime] = None
+100 |     created_by: Optional[str] = None
+    |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:99:17
+    |
+ 97 |     reason: str
+ 98 |     rule_id: Optional[str] = None
+ 99 |     expires_at: Optional[datetime] = None
+    |                 ^^^^^^^^^^^^^^^^^^
+100 |     created_by: Optional[str] = None
+    |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:100:17
+    |
+ 98 |     rule_id: Optional[str] = None
+ 99 |     expires_at: Optional[datetime] = None
+100 |     created_by: Optional[str] = None
+    |                 ^^^^^^^^^^^^^
+    |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:110:14
+    |
+108 |     entry_value: str
+109 |     reason: str
+110 |     rule_id: Optional[str]
+    |              ^^^^^^^^^^^^^
+111 |     expires_at: Optional[datetime]
+112 |     created_by: Optional[str]
+    |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:111:17
+    |
+109 |     reason: str
+110 |     rule_id: Optional[str]
+111 |     expires_at: Optional[datetime]
+    |                 ^^^^^^^^^^^^^^^^^^
+112 |     created_by: Optional[str]
+113 |     created_at: datetime
+    |
+help: Convert to `X | None`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\schemas.py:112:17
+    |
+110 |     rule_id: Optional[str]
+111 |     expires_at: Optional[datetime]
+112 |     created_by: Optional[str]
+    |                 ^^^^^^^^^^^^^
+113 |     created_at: datetime
+    |
+help: Convert to `X | None`
+
+UP006 Use `list` instead of `List` for type annotation
+   --> backend\app\schemas.py:122:16
+    |
+121 |     ingested: int
+122 |     event_ids: List[int]
+    |                ^^^^
+123 |     errors: List[str] = []
+    |
+help: Replace with `list`
+
+UP006 Use `list` instead of `List` for type annotation
+   --> backend\app\schemas.py:123:13
+    |
+121 |     ingested: int
+122 |     event_ids: List[int]
+123 |     errors: List[str] = []
+    |             ^^^^
+    |
+help: Replace with `list`
+
+UP006 Use `list` instead of `List` for type annotation
+   --> backend\app\schemas.py:130:21
+    |
+129 |     alerts_generated: int
+130 |     rules_executed: List[str]
+    |                     ^^^^
+131 |     execution_time_ms: float
+    |
+help: Replace with `list`
+
+F401 [*] `typing.List` imported but unused
+ --> backend\app\services\normalizer.py:7:31
+  |
+5 | import uuid
+6 | from datetime import datetime, timezone
+7 | from typing import Any, Dict, List, Optional
+  |                               ^^^^
+8 |
+9 | from dateutil import parser
+  |
+help: Remove unused import: `typing.List`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\normalizer.py:12:32
+   |
+12 | def normalize_event(raw_event: Dict[str, Any]) -> Dict[str, Any]:
+   |                                ^^^^
+13 |     """
+14 |     Normalize raw event data into canonical schema.
+   |
+help: Replace with `dict`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\normalizer.py:12:51
+   |
+12 | def normalize_event(raw_event: Dict[str, Any]) -> Dict[str, Any]:
+   |                                                   ^^^^
+13 |     """
+14 |     Normalize raw event data into canonical schema.
+   |
+help: Replace with `dict`
+
+UP045 Use `X | None` for type annotations
+   --> backend\app\services\normalizer.py:169:41
+    |
+169 | def _normalize_outcome(outcome: Any) -> Optional[str]:
+    |                                         ^^^^^^^^^^^^^
+170 |     """Normalize outcome to success, failure, or error."""
+171 |     if not outcome:
+    |
+help: Convert to `X | None`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\api_abuse.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """Detect API abuse."""
+50 |         threshold = 100  # 100+ requests in 5 minutes
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\api_abuse.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """Detect API abuse."""
+50 |         threshold = 100  # 100+ requests in 5 minutes
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\base.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """
+50 |         Execute detection logic.
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\base.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """
+50 |         Execute detection logic.
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\brute_force.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """Detect brute force attacks."""
+50 |         threshold = 5  # 5+ failed attempts triggers alert
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\brute_force.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """Detect brute force attacks."""
+50 |         threshold = 5  # 5+ failed attempts triggers alert
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\impossible_travel.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """Detect impossible travel."""
+50 |         # Get login events grouped by user
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\impossible_travel.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """Detect impossible travel."""
+50 |         # Get login events grouped by user
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\password_spray.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """Detect password spray attacks."""
+50 |         threshold = 10  # 10+ unique users targeted
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\password_spray.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """Detect password spray attacks."""
+50 |         threshold = 10  # 10+ unique users targeted
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\privilege_escalation.py:72:10
+   |
+70 |     def detect(
+71 |         self, db: Session, window_start: datetime, window_end: datetime
+72 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+73 |         """Detect privilege escalation."""
+74 |         # Query privilege-related events
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\privilege_escalation.py:72:15
+   |
+70 |     def detect(
+71 |         self, db: Session, window_start: datetime, window_end: datetime
+72 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+73 |         """Detect privilege escalation."""
+74 |         # Query privilege-related events
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\suspicious_api_key.py:48:10
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+49 |         """Detect API key generation outside business hours."""
+50 |         events = (
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\suspicious_api_key.py:48:15
+   |
+46 |     def detect(
+47 |         self, db: Session, window_start: datetime, window_end: datetime
+48 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+49 |         """Detect API key generation outside business hours."""
+50 |         events = (
+   |
+help: Replace with `dict`
+
+UP006 Use `list` instead of `List` for type annotation
+  --> backend\app\services\rules\suspicious_user_agent.py:67:10
+   |
+65 |     def detect(
+66 |         self, db: Session, window_start: datetime, window_end: datetime
+67 |     ) -> List[Dict[str, Any]]:
+   |          ^^^^
+68 |         """Detect suspicious user agents."""
+69 |         # Get events with user agents
+   |
+help: Replace with `list`
+
+UP006 Use `dict` instead of `Dict` for type annotation
+  --> backend\app\services\rules\suspicious_user_agent.py:67:15
+   |
+65 |     def detect(
+66 |         self, db: Session, window_start: datetime, window_end: datetime
+67 |     ) -> List[Dict[str, Any]]:
+   |               ^^^^
+68 |         """Detect suspicious user agents."""
+69 |         # Get events with user agents
+   |
+help: Replace with `dict`
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> backend\tests\test_rules.py:3:1
+   |
+ 1 |   """Tests for detection rules."""
+ 2 |
+ 3 | / from datetime import datetime, timedelta, timezone
+ 4 | |
+ 5 | | import pytest
+ 6 | | from app.database import Base
+ 7 | | from app.models import Event
+ 8 | | from app.services.rules.api_abuse import ApiAbuseRule
+ 9 | | from app.services.rules.brute_force import BruteForceRule
+10 | | from app.services.rules.impossible_travel import ImpossibleTravelRule
+11 | | from app.services.rules.password_spray import PasswordSprayRule
+12 | | from app.services.rules.privilege_escalation import PrivilegeEscalationRule
+13 | | from app.services.rules.suspicious_user_agent import SuspiciousUserAgentRule
+14 | | from app.services.rules.suspicious_api_key import SuspiciousApiKeyRule
+15 | | from sqlalchemy import create_engine
+16 | | from sqlalchemy.orm import sessionmaker
+   | |_______________________________________^
+   |
+help: Organize imports
+
+Found 56 errors.
+[*] 5 fixable with the `--fix` option (51 hidden fixes can be enabled with the `--unsafe-fixes` option).

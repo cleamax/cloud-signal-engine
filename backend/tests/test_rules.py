@@ -10,8 +10,8 @@ from app.services.rules.brute_force import BruteForceRule
 from app.services.rules.impossible_travel import ImpossibleTravelRule
 from app.services.rules.password_spray import PasswordSprayRule
 from app.services.rules.privilege_escalation import PrivilegeEscalationRule
-from app.services.rules.suspicious_user_agent import SuspiciousUserAgentRule
 from app.services.rules.suspicious_api_key import SuspiciousApiKeyRule
+from app.services.rules.suspicious_user_agent import SuspiciousUserAgentRule
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -228,6 +228,7 @@ def test_brute_force_no_alert_below_threshold(db_session):
 
     # Should NOT trigger alert
     assert len(alerts) == 0
+
 
 def test_suspicious_api_key_rule(db_session):
     """Test suspicious API key generation detection."""

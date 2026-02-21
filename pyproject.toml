@@ -43,7 +43,7 @@ target-version = "py38"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
-ignore = ["E501", "UP017"]  # Line too long, datetime.UTC compatibility
+ignore = ["E501", "UP017", "UP006", "UP007", "UP045"]  # Line too long, datetime.UTC, and Python 3.8 compatibility
 
 [tool.ruff.format]
 quote-style = "double"

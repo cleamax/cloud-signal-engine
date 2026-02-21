@@ -1,0 +1,2 @@
+Would reformat: backend\tests\test_rules.py
+1 file would be reformatted, 26 files already formatted

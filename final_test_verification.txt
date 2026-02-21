@@ -33,4 +33,4 @@ backend/tests/test_rules.py::test_privilege_escalation_rule PASSED       [ 91%]
 backend/tests/test_rules.py::test_brute_force_no_alert_below_threshold PASSED [ 95%]
 backend/tests/test_rules.py::test_suspicious_api_key_rule PASSED         [100%]
 
-============================= 24 passed in 4.26s ==============================
+============================= 24 passed in 4.06s ==============================
