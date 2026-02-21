@@ -11,6 +11,7 @@ from app.services.rules.impossible_travel import ImpossibleTravelRule
 from app.services.rules.password_spray import PasswordSprayRule
 from app.services.rules.privilege_escalation import PrivilegeEscalationRule
 from app.services.rules.suspicious_user_agent import SuspiciousUserAgentRule
+from app.services.rules.suspicious_api_key import SuspiciousApiKeyRule
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -227,3 +228,40 @@ def test_brute_force_no_alert_below_threshold(db_session):
 
     # Should NOT trigger alert
     assert len(alerts) == 0
+
+def test_suspicious_api_key_rule(db_session):
+    """Test suspicious API key generation detection."""
+    rule = SuspiciousApiKeyRule()
+    # 11 PM timezone.utc (Outside 08:00 - 18:00)
+    now = datetime(2026, 2, 12, 23, 43, 12, tzinfo=timezone.utc)
+    window_start = now - timedelta(minutes=60)
+
+    # Suspicious event
+    event1 = Event(
+        timestamp=now,
+        actor="svc-backend-prod",
+        source_ip="185.212.x.x",
+        action="GenerateAccessKey",
+        raw_data={"region": "eu-central-1"},
+    )
+
+    # Normal business hours event
+    event2 = Event(
+        timestamp=now.replace(hour=10),
+        actor="svc-backend-prod",
+        source_ip="185.212.x.x",
+        action="GenerateAccessKey",
+        raw_data={"region": "eu-central-1"},
+    )
+
+    db_session.add_all([event1, event2])
+    db_session.commit()
+
+    # Run detection
+    alerts = rule.detect(db_session, window_start, now)
+
+    # Should trigger alert only for event1
+    assert len(alerts) == 1
+    assert alerts[0]["rule_id"] == "suspicious_api_key"
+    assert "svc-backend-prod" in alerts[0]["summary"]
+    assert "23:43:12" in alerts[0]["evidence"]["timestamp"]
